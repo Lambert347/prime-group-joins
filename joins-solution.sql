@@ -25,11 +25,11 @@ WHERE products.id = 6;
 
 
 5. Get the number of orders for each customer. NOTE: It is OK if those without orders are not included in results.
-SELECT line_items.quantity, customers.first_name
+SELECT COUNT(o.id), first_name
 FROM customers
-JOIN addresses ON customers.id = addresses.customer_id
-JOIN line_items li ON orders.id = li.order_id
-JOIN orders ON addresses.id = orders.address_id;
+JOIN addresses as a ON customers.id = a.customer_id
+JOIN orders as o ON a.id = o.address_id
+GROUP BY customers.first_name;
 
 6. How many customers do we have? --> 4 customers
 SELECT COUNT(*) FROM customers;
@@ -37,5 +37,10 @@ SELECT COUNT(*) FROM customers;
 7. How many products do we carry?
 SELECT COUNT(*) FROM products; ---> 7
 
-8. What is the total available on-hand quantity of diet pepsi?
+8. What is the total available on-hand quantity of diet pepsi? --> 92
+SELECT SUM(wp.on_hand)
+FROM products
+JOIN warehouse_product wp ON products.id = wp.product_id
+JOIN warehouse ON warehouse.id = wp.warehouse_id
+WHERE products.id = 6;
 
